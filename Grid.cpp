@@ -47,9 +47,9 @@ void Grid::setGrid(const string filename)
 		istringstream convert(pch); // stringstream used for the conversion constructed with the contents of 'pch' 
                              		// ie: the stream will start containing the characters of 'pch'
 		if ( !(convert >> size) ) // give the value to 'size' using the characters in the stream
-    	{ throw BaseException("Unable to read grid size!"); }    // if that fails, throw error
+    	{ throw fileError("Unable to read grid size!"); }    // if that fails, throw error
 	}
-	else { throw BaseException("Unable to open grid file!"); }
+	else { throw fileOpenError("Unable to open grid file!"); }
 	
 	// size the data vectors
 	lttrs.resize(size,size); // size number of rows and columns
@@ -68,10 +68,10 @@ void Grid::setGrid(const string filename)
 			else
 			{ lttrs[i][j] = *ch; } // store character
 			// validate character
-			if((((int)(*ch)) < 97) || (((int)(*ch)) > 122)) { throw BaseException("Warning: illegal character!"); }
+			if((((int)(*ch)) < 97) || (((int)(*ch)) > 122)) { throw fileError("Warning: illegal character!"); }
 		}
 	}
-	if(!gridfile.eof()) { throw BaseException("Warning: Not at end of file!"); }
+	if(!gridfile.eof()) { throw fileError("Warning: Not at end of file!"); }
 	// close file
 	gridfile.close();
 }
