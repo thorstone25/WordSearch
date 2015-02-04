@@ -9,31 +9,32 @@
 #include <sstream>
 #include <string>
 #include <d_except.h>
+#include <d_matrix.h>
 
 class Grid
 {
 	public:
 		Grid();
-		Grid(string filename);
-		void setGrid(string filename);
+		Grid(const string filename);
+		void setGrid(const string filename);
 		const char getChar(const int m, const int n);
 		const int getSize();
 		
 	protected:
-		vector<vector<char>> lttrs;
+		matrix<char> lttrs;
 		int size;
 }
 
 const int Grid::getSize() {return size;}
 
 const char Grid::getChar(const int m, const int n)
-{	return lttrs[m][n]; }
+{ return lttrs[m][n]; }
 
 Grid::Grid() {size = 0;}
 
-Grid::Grid(string filename) { setGrid(filename); }
+Grid::Grid(const string filename) { setGrid(filename); }
 // sets the grid to the values of the given file
-void Grid::setGrid(string filename)
+void Grid::setGrid(const string filename)
 {
 	// open file
 	ifstream gridfile(filename);
@@ -44,19 +45,17 @@ void Grid::setGrid(string filename)
 		getline(myfile,line); // read first line
 		char * pch =strtok(line," "); // split string by space character token
 		istringstream convert(pch); // stringstream used for the conversion constructed with the contents of 'pch' 
-                             		// ie: the stream will start containing the characters of 'Text'
-		if ( !(convert >> size) ) //give the value to 'size' using the characters in the stream
-    	{ throw BaseException("Unable to read grid size!"); }    //if that fails throw error
+                             		// ie: the stream will start containing the characters of 'pch'
+		if ( !(convert >> size) ) // give the value to 'size' using the characters in the stream
+    	{ throw BaseException("Unable to read grid size!"); }    // if that fails, throw error
 	}
 	else { throw BaseException("Unable to open grid file!"); }
 	
-	// create/size the data vectors
-	lttrs.resize(size); // size number of rows
-	lttrs.assign(size,vector<char>(size,'\0')); // assign copies of rows
-	
+	// size the data vectors
+	lttrs.resize(size,size); // size number of rows and columns
+
 	// read the characters from the rest of the file
-	// temporary free character
-	char *ch;
+	char *ch; // temporary free character
 	for(int i=0;i<size,i++)
 	{
 		for(int j=0;j<size;j++)
